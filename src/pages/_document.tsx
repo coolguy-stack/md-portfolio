@@ -29,6 +29,8 @@ export default function Document() {
         <meta name="darkreader-lock" />
         <meta name="color-scheme" content="dark" />
         <script dangerouslySetInnerHTML={{ __html: forceDark }} />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* <link rel="alternate icon" href="/favicon.ico" /> */}
       </Head>
       <body className="bg-black text-white antialiased">
         <Main />
