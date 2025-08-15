@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root { color-scheme: dark; }
+html, body { background: #09090b; } /* zinc-950 */
+
+@media (pointer: fine) {
+  html, body { cursor: none; }
+  a, button, [role="button"] { cursor: none; }
+  input, textarea, select { cursor: text; } /* preserve I-beam */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* hide horizontal scrollbar for the projects scroller */
+.hide-scrollbar {
+  scrollbar-width: none;         /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;                 /* Chrome/Safari */
+}
+
+html { scrollbar-gutter: stable both-edges; }
+
+html, body { cursor: none; }
+button[disabled], [aria-disabled="true"] { cursor: none !important; }
+
+/* styles/globals.css */
+.has-custom-cursor, .has-custom-cursor * { cursor: none !important; }
+
+html, body {
+  overflow-x: hidden;   /* prevent tiny vw overflows from showing */
+}
+

@@ -1,0 +1,25 @@
+node_modules/
+.next/
+out/
+.vercel/
+coverage/
+dist/
+.DS_Store
+*.log
+.env
+.env.* 
+!.env.example
+cat > .gitignore <<'EOF'
+node_modules/
+.next/
+out/
+.vercel/
+coverage/
+dist/
+.DS_Store
+*.log
+.env
+.env.* 
+!.env.example
+
+.pnpm-store/
