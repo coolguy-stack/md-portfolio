@@ -16,7 +16,7 @@ export default function Header() {
   const socials = [
     { label: "GitHub", href: "https://github.com/coolguy-stack", icon: <FiGithub /> },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/alifhossain86/", icon: <FiLinkedin /> },
-    { label: "Email", href: "mailto:alifhossain86@gmail.com", icon: <FiMail /> },
+    { label: "Email", href: "mailto:nafieu.alif@gmail.com", icon: <FiMail /> },
     { label: "Resume", href: "/md-resume.pdf", icon: <FiFileText /> },
   ];
 

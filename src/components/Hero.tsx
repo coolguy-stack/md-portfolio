@@ -74,7 +74,7 @@ export default function Hero() {
         >
           <IconBtn href="https://github.com/coolguy-stack" label="GitHub"><FiGithub /></IconBtn>
           <IconBtn href="https://www.linkedin.com/in/alifhossain86/" label="LinkedIn"><FiLinkedin /></IconBtn>
-          <IconBtn href="mailto:alifhossain86@gmail.com" label="Email"><FiMail /></IconBtn>
+          <IconBtn href="mailto:nafieu.alif@gmail.com" label="Email"><FiMail /></IconBtn>
           <IconBtn href="/md-resume.pdf" label="Resume"><FiFileText /></IconBtn>
         </motion.div>
       </div>
