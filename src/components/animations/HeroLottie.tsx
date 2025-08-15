@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRef } from "react";
 
 type Props = {
   src?: string;
@@ -27,7 +28,12 @@ export default function HeroLottie({
   style,
   ...rest
 }: Props) {
-  const elRef = React.useRef<HTMLElement | null>(null);
+  const elRef = useRef<HTMLElement | null>(null);
+
+  interface LottieElement extends HTMLElement {
+  setSpeed?: (speed: number) => void;
+  speed?: number;
+} 
 
   // Define web component on client
   React.useEffect(() => {
@@ -36,7 +42,7 @@ export default function HeroLottie({
 
   // Apply speed when ready and when it changes
   React.useEffect(() => {
-    const el = elRef.current as any;
+    const el = elRef.current as LottieElement;
     if (!el) return;
 
     const apply = () => {
@@ -69,14 +75,17 @@ export default function HeroLottie({
   if (width !== undefined) styleOut.width = toCss(width);
   if (height !== undefined) styleOut.height = toCss(height);
 
-  return React.createElement("dotlottie-player" as any, {
-    ref: (node: any) => (elRef.current = node),
+// Or if you prefer a more generic approach:
+  
+
+  return React.createElement("dotlottie-player", {
+    ref: (node: HTMLElement | null) => (elRef.current = node),
     src,
     autoplay,
     loop,
-    speed, // harmless if not supported; we also set via API above
+    speed,
     background: "transparent",
-    class: className, // pass React className to custom element
+    class: className,
     style: styleOut,
     ...rest,
   });

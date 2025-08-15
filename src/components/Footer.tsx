@@ -57,7 +57,7 @@ export default function Footer() {
             transition={{ duration: 0.5 }}
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white"
           >
-            That's All Folks!
+            That&apos;s All Folks!
           </motion.h2>
 
           <motion.p

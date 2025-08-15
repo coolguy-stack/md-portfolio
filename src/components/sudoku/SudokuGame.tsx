@@ -290,7 +290,11 @@ export default function SudokuGame() {
           nc = (c + d[1] + 9) % 9;
         dispatch({ type: "select", r: nr, c: nc });
       } else if (e.key.toLowerCase() === "z" && (e.ctrlKey || e.metaKey)) {
-        e.shiftKey ? redo() : undo();
+        if (e.shiftKey) {
+          redo();
+        } else {
+          undo();
+        }
       }
     };
     window.addEventListener("keydown", onKey);

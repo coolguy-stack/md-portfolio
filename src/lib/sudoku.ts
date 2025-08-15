@@ -49,12 +49,8 @@ export function emptyGrid(): Grid {
 function cloneGrid(g: Grid): Grid {
   return g.map((r) => r.slice());
 }
-function equals(a: Grid, b: Grid) {
-  for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) if (a[i][j] !== b[i][j]) return false;
-  return true;
-}
+
 const DIGITS = [1,2,3,4,5,6,7,8,9];
-const boxIdx = (r: number, c: number) => Math.floor(r / 3) * 3 + Math.floor(c / 3);
 
 // --- Candidates ---------------------------------------------------------------
 export function candidates(g: Grid, r: number, c: number): number[] {
@@ -116,8 +112,6 @@ export function solveCount(g: Grid, limit = 2): { count: number; solution?: Grid
 // --- Full solution generator --------------------------------------------------
 function generateSolved(rnd: () => number): Grid {
   const g = emptyGrid();
-  const rows = Array.from({ length: 9 }, (_, i) => i);
-  const cols = Array.from({ length: 9 }, (_, i) => i);
 
   function fill(cell = 0): boolean {
     if (cell >= 81) return true;

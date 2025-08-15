@@ -5,7 +5,6 @@ import Section from "@/components/ui/Section";
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiFileText } from "react-icons/fi";
 import HeroLottie from "@/components/animations/HeroLottie";
-import { useEffect, useState } from "react";
 
 function IconBtn({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   const external = href.startsWith("http");
@@ -26,8 +25,6 @@ function IconBtn({ href, label, children }: { href: string; label: string; child
 }
 
 export default function Hero() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   return (
     <Section id="hero" className="relative min-h-[100svh] lg:min-h-screen flex items-center justify-center overflow-hidden">

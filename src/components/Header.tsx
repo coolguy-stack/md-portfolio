@@ -20,9 +20,9 @@ export default function Header() {
     { label: "Resume", href: "/md-resume.pdf", icon: <FiFileText /> },
   ];
 
-  const refresh = () => {
-    if (typeof window !== "undefined") window.location.reload();
-  };
+  // const refresh = () => {
+  //   if (typeof window !== "undefined") window.location.reload();
+  // };
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-black border-b border-white/10">
