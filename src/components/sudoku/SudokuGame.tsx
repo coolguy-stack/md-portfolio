@@ -360,8 +360,36 @@ export default function SudokuGame() {
 
   return (
     <div className="w-full max-w-6xl mx-auto">
+      {/* Top bar — mobile (compact) */}
+      <div className="md:hidden mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-white/60 text-sm">Difficulty</span>
+          <DifficultyDropdown value={difficulty} onChange={(d) => setDifficulty(d)} />
+          <button
+            onClick={() => newGame({ daily: true })}
+            className="ml-2 rounded-md border border-white/20 px-3 py-1.5 text-sm text-white hover:bg-white/10"
+            title="Daily Sudoku"
+          >
+            Daily
+          </button>
+          <button
+            onClick={() => newGame()}
+            className="rounded-md border border-white/20 px-3 py-1.5 text-sm text-white hover:bg-white/10"
+            title="New random"
+          >
+            New
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-white/70 text-sm">Time: {fmtTime(state.elapsed)}</span>
+          {state.status === "won" && (
+            <span className="text-emerald-300 text-xs">• {fmtTime(state.finalElapsed ?? 0)}</span>
+          )}
+        </div>
+      </div>
       {/* Top bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+      <div className="hidden md:flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-2">
           <span className="text-white/60 text-sm">Difficulty</span>
           <DifficultyDropdown
