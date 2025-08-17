@@ -18,10 +18,10 @@ export default function About() {
 
       <div className="mt-10 flex flex-col md:flex-row gap-10 items-center md:items-start">
         <Image
-          src="/profile.JPG"
+          src="/profile.jpg"
           alt="Portrait of Md Nafieu Hossain Alif"
-          width={300}
-          height={300}
+          width={500}
+          height={500}
           className="rounded-xl object-cover"
           priority
         />
@@ -62,7 +62,7 @@ export default function About() {
               <div>
                 <p className="font-semibold mb-1">🤖 ML/AI</p>
                 <p className="text-zinc-700 dark:text-zinc-300">
-                  PPO, DQN, OpenCV, MediaPipe, Llama-2-70B, OpenAI Gym
+                  PPO, DQN, OpenCV, MediaPipe, SageMaker, OpenAI Gym
                 </p>
               </div>
               <div>
