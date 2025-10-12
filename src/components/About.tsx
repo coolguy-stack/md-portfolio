@@ -16,6 +16,16 @@ export default function About() {
         and pretending I know what I&apos;m doing (spoiler: it usually works out pretty well 😉).
       </p>
 
+                    
+      <div className="flex justify-center my-10">
+        <img
+          src="https://raw.githubusercontent.com/platane/snk/output/github-contribution-grid-snake-dark.svg"
+          alt="GitHub contribution grid snake animation"
+          className="w-full max-w-3xl h-auto rounded-lg shadow-md"
+          loading="lazy"
+        />
+      </div>
+
       <div className="mt-10 flex flex-col md:flex-row gap-10 items-center md:items-start">
         <Image
           src="/profile.jpg"
@@ -56,25 +66,25 @@ export default function About() {
               <div>
                 <p className="font-semibold mb-1">🏗️ Frameworks</p>
                 <p className="text-zinc-700 dark:text-zinc-300">
-                  .NET Core, React, Flask, Spring Boot, TensorFlow, PyTorch
+                  .NET Core, Next.js, Flask, Spring Boot, Django, Ruby on Rails
                 </p>
               </div>
               <div>
                 <p className="font-semibold mb-1">🤖 ML/AI</p>
                 <p className="text-zinc-700 dark:text-zinc-300">
-                  PPO, DQN, OpenCV, MediaPipe, SageMaker, OpenAI Gym
+                  Pytorch, Tensorflow, OpenCV, MediaPipe, SageMaker, OpenAI Gym, Weights and Biases
                 </p>
               </div>
               <div>
                 <p className="font-semibold mb-1">☁️ Cloud & Databases</p>
                 <p className="text-zinc-700 dark:text-zinc-300">
-                  AWS, Azure, Docker, PostgreSQL, MySQL, MongoDB, Redis
+                  AWS, Azure, Terraform, Docker, Kubernetes, PostgreSQL, MySQL, MongoDB, Redis
                 </p>
               </div>
               <div>
                 <p className="font-semibold mb-1">🛠️ Tools</p>
                 <p className="text-zinc-700 dark:text-zinc-300">
-                  Git, VS Code, TensorBoard, JetBrains Tools, Jira
+                  Git, VS Code, TensorBoard, JetBrains Tools, Jira, Figma, Insomnia, Linux
                 </p>
               </div>
               <div>

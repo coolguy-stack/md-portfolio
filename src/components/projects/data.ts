@@ -40,5 +40,12 @@ export const PROJECTS: Project[] = [
     tags: ["Java", "Spring Boot", "Maven", "SonarQube", "Apache Commons CLI"],
     code: "https://github.com/coolguy-stack/a2-rescue-mission-team-207",
   },
-  // add more…
+  {
+    title: "AegisMark - Image Watermarking Tool",
+    blurb:
+      "A tool designed to add watermarks to images using advanced algorithms, ensuring copyright protection for digital content.",
+    image: "/aegismark.png",
+    tags: ["Python", "Tensorflow", "Kubernetes", "Google Cloud Platform", "FastAPI"],
+    code: "https://github.com/coolguy-stack/aegismark",
+  },
 ];

@@ -18,8 +18,8 @@ export default function Cursor() {
   const my = useMotionValue(-100);
 
   // ring follows mouse with a spring (silky)
-  const rx = useSpring(mx, { stiffness: 400, damping: 40, mass: 0.6 });
-  const ry = useSpring(my, { stiffness: 400, damping: 40, mass: 0.6 });
+  const rx = useSpring(mx, { stiffness: 400, damping: 50, mass: 0.6 });
+  const ry = useSpring(my, { stiffness: 400, damping: 50, mass: 0.6 });
 
   // inner "joystick" dot offset relative to ring center
   const ix = useMotionValue(0);
@@ -27,8 +27,8 @@ export default function Cursor() {
 
   // constants you can tweak
   const SIZE = hovering ? 32 : 24;  // ring size (px) — same as before
-  const MAX = 10;                   // max joystick offset (px)
-  const K = 0.25;                   // responsiveness of inner dot
+  const MAX = 20;                   // max joystick offset (px)
+  const K = 0.10;                   // responsiveness of inner dot
 
   // enable for fine pointers only
   useEffect(() => {
