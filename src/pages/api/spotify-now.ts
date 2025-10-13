@@ -2,16 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const TOKEN_URL  = "https://accounts.spotify.com/api/token";
 const NOW_URL    = "https://api.spotify.com/v1/me/player/currently-playing";
-const RECENT_URL = "https://api.spotify.com/v1/me/player/recently-played?limit=5";
+const RECENT_URL = "https://api.spotify.com/v1/me/player/recently-played";
 
-// access-token cache
 let tokenCache: { token: string; exp: number } | null = null;
-
-// NEW: remember the last *live* track we observed while playing
-let lastSeen: {
-  track: any | null;
-  seenAt: number;      // Date.now() when we observed it playing
-} = { track: null, seenAt: 0 };
 
 function noCache(res: NextApiResponse) {
   res.setHeader("Cache-Control", "no-store, no-cache, max-age=0, must-revalidate, s-maxage=0");
@@ -24,9 +17,9 @@ function noCache(res: NextApiResponse) {
 }
 
 async function getAccessToken(): Promise<string> {
-  if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET || !process.env.SPOTIFY_REFRESH_TOKEN) {
+  if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET || !process.env.SPOTIFY_REFRESH_TOKEN)
     throw new Error("Missing Spotify env vars");
-  }
+
   const now = Date.now();
   if (tokenCache && now < tokenCache.exp - 10_000) return tokenCache.token;
 
@@ -43,7 +36,6 @@ async function getAccessToken(): Promise<string> {
     }),
     cache: "no-store",
   });
-
   const json = await resp.json();
   if (!resp.ok) throw new Error(json?.error || "token_error");
 
@@ -65,66 +57,70 @@ function shape(t: any, playing: boolean, progress_ms = 0) {
   };
 }
 
+// Fetch recent items, optionally only those AFTER minTs
+async function getMostRecent(access: string, minTs?: number) {
+  const qs = new URLSearchParams({ limit: "10" });
+  if (minTs && Number.isFinite(minTs)) qs.set("after", String(minTs)); // Spotify 'after' is ms since epoch
+
+  const r = await fetch(`${RECENT_URL}?${qs.toString()}`, {
+    headers: { Authorization: `Bearer ${access}`, "Cache-Control": "no-cache" },
+    cache: "no-store",
+  });
+  const data = await r.json();
+  const items: any[] = Array.isArray(data?.items) ? data.items : [];
+
+  // If 'after' returns nothing (or no minTs), we still want the latest known
+  if (!items.length) {
+    const r2 = await fetch(`${RECENT_URL}?limit=10`, {
+      headers: { Authorization: `Bearer ${access}`, "Cache-Control": "no-cache" },
+      cache: "no-store",
+    });
+    const d2 = await r2.json();
+    const items2: any[] = Array.isArray(d2?.items) ? d2.items : [];
+    items2.sort((a, b) => +new Date(b?.played_at || 0) - +new Date(a?.played_at || 0));
+    return { track: items2[0]?.track, played_at: items2[0]?.played_at, stale: true };
+  }
+
+  items.sort((a, b) => +new Date(b?.played_at || 0) - +new Date(a?.played_at || 0));
+  return { track: items[0]?.track, played_at: items[0]?.played_at, stale: false };
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  noCache(res);
   try {
     const access = await getAccessToken();
+    const minTs = Number(req.query.min || 0);
 
-    // 1) Try "now playing"
+    // 1) Try now playing
     const nowRes = await fetch(NOW_URL, {
       headers: { Authorization: `Bearer ${access}`, "Cache-Control": "no-cache" },
       cache: "no-store",
     });
 
-    // Helper: fetch & pick most recent by played_at
-    const getMostRecent = async () => {
-      const r = await fetch(RECENT_URL, {
-        headers: { Authorization: `Bearer ${access}`, "Cache-Control": "no-cache" },
-        cache: "no-store",
-      });
-      const data = await r.json();
-      const items: any[] = Array.isArray(data?.items) ? data.items : [];
-      items.sort(
-        (a, b) =>
-          new Date(b?.played_at || 0).getTime() - new Date(a?.played_at || 0).getTime()
-      );
-      return { track: items[0]?.track, played_at: items[0]?.played_at as string | undefined };
-    };
-
-    // If empty/error → use most recent
+    // If empty/error → use most recent newer than minTs (if any)
     if (nowRes.status === 204 || nowRes.status >= 400) {
-      const { track, played_at } = await getMostRecent();
-
-      // If recent is older than our last live observation, keep lastSeen
-      const recentTs = played_at ? new Date(played_at).getTime() : 0;
-      const chosen = (lastSeen.track && lastSeen.seenAt > recentTs) ? lastSeen.track : track;
-
-      noCache(res);
+      const { track, played_at, stale } = await getMostRecent(access, minTs);
       return res.status(200).json(
-        chosen ? { ...shape(chosen, false, 0), playlist: null, source: "recent|seen", played_at } : { playing: false }
+        track
+          ? { ...shape(track, false, 0), playlist: null, source: stale ? "recent(stale)" : "recent", played_at }
+          : { playing: false, source: "recent_empty" }
       );
     }
 
     const nowJson = await nowRes.json();
     const isPlaying = !!nowJson?.is_playing;
 
-    // 2) If NOT playing → use most recent, but don't go backwards vs lastSeen
     if (!isPlaying) {
-      const { track, played_at } = await getMostRecent();
-      const recentTs = played_at ? new Date(played_at).getTime() : 0;
-      const chosen = (lastSeen.track && lastSeen.seenAt > recentTs) ? lastSeen.track : track;
-
-      noCache(res);
+      const { track, played_at, stale } = await getMostRecent(access, minTs);
       return res.status(200).json(
-        chosen ? { ...shape(chosen, false, 0), playlist: null, source: "recent|seen", played_at } : { playing: false }
+        track
+          ? { ...shape(track, false, 0), playlist: null, source: stale ? "recent(stale)" : "recent", played_at }
+          : { playing: false, source: "recent_empty" }
       );
     }
 
-    // 3) Playing: update lastSeen and (optionally) attach playlist context
+    // Playing: return live track; include playlist context if desired
     const currentTrack = nowJson?.item;
-    if (currentTrack) {
-      lastSeen.track = currentTrack;
-      lastSeen.seenAt = Date.now();
-    }
 
     let playlist: { id?: string; name?: string; cover?: string; url?: string } | null = null;
     const ctxUri: string | undefined = nowJson?.context?.uri;
@@ -148,14 +144,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     }
 
-    noCache(res);
     return res.status(200).json({
       ...shape(currentTrack, true, nowJson?.progress_ms ?? 0),
       playlist,
       source: "now",
+      // when playing, you can also pass a synthetic "played_at" for the client to store if you want:
+      played_at: new Date().toISOString(),
     });
   } catch {
-    noCache(res);
     return res.status(200).json({ playing: false, source: "error" });
   }
 }

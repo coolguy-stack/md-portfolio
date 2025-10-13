@@ -35,6 +35,22 @@ export default function SpotifyNowCard() {
     return () => clearInterval(id);
     }, []);
 
+    useEffect(() => {
+    const load = async () => {
+        const last = localStorage.getItem("spotify_last_ts") || "";
+        const res = await fetch(`/api/spotify-now?min=${encodeURIComponent(last)}&t=${Date.now()}`, { cache: "no-store" });
+        const json = await res.json();
+        setData(json);
+
+        if (json?.played_at) {
+        // keep the latest you’ve rendered (as ms)
+        localStorage.setItem("spotify_last_ts", String(new Date(json.played_at).getTime()));
+        }
+    };
+    load();
+    const id = setInterval(load, 15000);
+    return () => clearInterval(id);
+    }, []);
 
 
   const pct = useMemo(() => {
