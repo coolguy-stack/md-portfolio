@@ -10,6 +10,26 @@ export type ExperienceItem = {
 
 export const experiences: ExperienceItem[] = [
   {
+    company: "McMaster AI Society",
+    title: "Machine Learning Engineer — Deepfake Detection",
+    date: "Sep 2025 – Present",
+    location: "Hamilton, ON",
+    description:
+      "Building a deepfake image detector using a CNN + ViT ensemble. Set up a PyTorch training pipeline (timm ViTs, mixed precision, strong augmentations), built evaluation (ROC-AUC/PR, TPR@FPR), and tracked experiments with W&B. Created OpenCV-based data curation and inference tooling and exposed a FastAPI service for demo and integration.",
+    tech: ["PyTorch", "timm (ViT)", "Weights & Biases", "OpenCV", "FastAPI"],
+    icon: "/mac-ai.jpg",
+  },
+  {
+  company: "McMaster RoboSub",
+  title: "Software Developer — Perception & Controls",
+  date: "Sept 2025 – Present",
+  location: "Hamilton, ON",
+  description:
+    "Building C++/ROS 2 nodes for our AUV: sensor drivers and real-time control loops, OpenCV-based target detection, and EKF sensor fusion (IMU/DVL/pressure) with on-robot testing and Gazebo/Ignition simulation.",
+  tech: ["C++17", "ROS 2", "OpenCV", "Eigen", "PCL"],
+  icon: "/robosub.jpg",
+  },
+  {
     company: "NAVBLUE an Airbus Company",
     title: "Software Engineer Intern",
     date: "May 2024 – Aug 2025",

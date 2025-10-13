@@ -6,6 +6,7 @@ import Hobbies from "@/components/Hobbies";
 import Projects from "@/components/projects/Projects";
 import SudokuPage from "@/components/sudoku/Sudoku";
 import Footer from "@/components/Footer";
+import SpotifyNowCard from "@/components/SpotifyNowCard";
 
 export default function Home() {
   return (
@@ -15,6 +16,8 @@ export default function Home() {
       <Divider inset className="my-16" thickness={2} />
 
       <About />
+
+      <SpotifyNowCard />
 
       <Divider inset className="my-16" thickness={2} />
 
